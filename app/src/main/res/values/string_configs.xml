@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="agora_app_id" translatable="false">d5af82b4b85e4838b2caec2a84e71cf3</string>
+    <string name="agora_app_id" translatable="false"></string>
     <string name="agora_access_token" translatable="false"></string>
 </resources>
