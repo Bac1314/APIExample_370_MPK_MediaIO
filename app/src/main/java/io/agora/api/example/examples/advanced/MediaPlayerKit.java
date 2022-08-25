@@ -298,8 +298,8 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
 //            String url = Constant.MP4_FILE_PATH; // Local file path
 //            if (url != null && !"".equals(url)) {
 
-//            engine.setVideoSource(null);
-//            engine.setVideoSource(mSource);
+            engine.setVideoSource(null);
+            engine.setVideoSource(mSource);
 
             agoraMediaPlayerKit.open("/sdcard/Download/AudioVideoSyncTest.mp4", 0);
             progressBar.setVisibility(View.VISIBLE);
