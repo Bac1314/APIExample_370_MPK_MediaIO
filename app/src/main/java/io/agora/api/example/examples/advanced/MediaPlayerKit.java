@@ -75,7 +75,6 @@ import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 )
 public class MediaPlayerKit extends BaseFragment implements View.OnClickListener {
 
-    private volatile IVideoFrameConsumer mConsumer;
     private static final String TAG = MediaPlayerKit.class.getSimpleName();
 
     private Button join, open, play, stop, pause, publish, unpublish;
@@ -294,12 +293,8 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
                 unpublish.setEnabled(false);
             }
         } else if (v.getId() == R.id.open) {
-////            String url = et_url.getText().toString();
-//            String url = Constant.MP4_FILE_PATH; // Local file path
-//            if (url != null && !"".equals(url)) {
-
-            engine.setVideoSource(null);
-            engine.setVideoSource(mSource);
+//            engine.setVideoSource(null);
+//            engine.setVideoSource(mSource);
 
             agoraMediaPlayerKit.open("/sdcard/Download/AudioVideoSyncTest.mp4", 0);
             progressBar.setVisibility(View.VISIBLE);

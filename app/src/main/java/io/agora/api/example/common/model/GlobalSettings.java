@@ -7,7 +7,9 @@ import java.lang.reflect.Field;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
+import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+import static io.agora.rtc.video.VideoEncoderConfiguration.VD_1280x720;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 public class GlobalSettings {
@@ -17,15 +19,15 @@ public class GlobalSettings {
 
     public String getVideoEncodingDimension() {
         if(videoEncodingDimension == null)
-            return "VD_640x360";
+            return "VD_1280x720";
         else
             return videoEncodingDimension;
     }
 
     public VideoEncoderConfiguration.VideoDimensions getVideoEncodingDimensionObject() {
         if(videoEncodingDimension == null)
-            return VD_640x360;
-        VideoEncoderConfiguration.VideoDimensions value = VD_640x360;
+            return VD_1280x720;
+        VideoEncoderConfiguration.VideoDimensions value = VD_1280x720;
         try {
             Field tmp = VideoEncoderConfiguration.class.getDeclaredField(videoEncodingDimension);
             tmp.setAccessible(true);
@@ -44,7 +46,7 @@ public class GlobalSettings {
 
     public String getVideoEncodingFrameRate() {
         if(videoEncodingFrameRate == null)
-            return FRAME_RATE_FPS_15.name();
+            return FRAME_RATE_FPS_30.name();
         else
             return videoEncodingFrameRate;
     }
