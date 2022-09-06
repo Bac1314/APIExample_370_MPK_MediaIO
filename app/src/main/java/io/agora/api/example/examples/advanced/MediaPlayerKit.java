@@ -48,6 +48,7 @@ import io.agora.mediaplayer.data.AudioFrame;
 import io.agora.mediaplayer.data.VideoFrame;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.RtcEngineConfig;
 import io.agora.rtc.mediaio.AgoraDefaultSource;
 import io.agora.rtc.mediaio.IVideoFrameConsumer;
 import io.agora.rtc.mediaio.IVideoSource;
@@ -64,6 +65,8 @@ import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
 import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
 import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
 import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
+import static io.agora.rtc.video.VideoEncoderConfiguration.VD_120x120;
+import static io.agora.rtc.video.VideoEncoderConfiguration.VD_1280x720;
 import static io.agora.rtc.video.VideoEncoderConfiguration.VD_640x360;
 
 @Example(
@@ -117,7 +120,22 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
              *              How to get the App ID</a>
              * @param handler IRtcEngineEventHandler is an abstract class providing default implementation.
              *                The SDK uses this class to report to the app on SDK runtime events.*/
-            engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
+            // Java
+            RtcEngineConfig.LogConfig logConfig = new RtcEngineConfig.LogConfig();// Set the log filter to ERROR
+            logConfig.level = 0x0001;
+// String ts = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        logConfig.filePath = "/sdcard/" + "AgoraBac.log";// Set the log file size to 2 MB
+            logConfig.fileSize = 2048;
+
+            RtcEngineConfig config = new RtcEngineConfig();
+            config.mAppId = getString(R.string.agora_app_id);
+            config.mEventHandler = iRtcEngineEventHandler;
+            config.mContext = context.getApplicationContext();
+            config.mLogConfig = logConfig;
+
+            engine = RtcEngine.create(config);
+
+            //engine = RtcEngine.create(context.getApplicationContext(), getString(R.string.agora_app_id), iRtcEngineEventHandler);
         } catch (Exception e) {
             e.printStackTrace();
             getActivity().onBackPressed();
@@ -182,6 +200,8 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
         view.findViewById(R.id.unpublish).setOnClickListener(this);
         fl_local = view.findViewById(R.id.fl_local);
         fl_remote = view.findViewById(R.id.fl_remote);
+
+
         agoraMediaPlayerKit = new AgoraMediaPlayerKit(this.getActivity());
         agoraMediaPlayerKit.registerPlayerObserver(new MediaPlayerObserver() {
             @Override
@@ -249,8 +269,7 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
 
     // BAC'S CODe //
     private void sendMPKFrame(VideoFrame videoFrame){
-        if (mSource.getConsumer() == null) return;
-
+        if (mSource == null) return;
         mSource.getConsumer().consumeByteBufferFrame(videoFrame.buffer, videoFrame.format, videoFrame.width, videoFrame.height, videoFrame.rotation, videoFrame.timestamp);
     }
     // END//
@@ -293,8 +312,9 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
                 unpublish.setEnabled(false);
             }
         } else if (v.getId() == R.id.open) {
-//            engine.setVideoSource(null);
-//            engine.setVideoSource(mSource);
+            //createNewSource();
+            engine.setVideoSource(null);
+            engine.setVideoSource(mSource);
 
             agoraMediaPlayerKit.open("/sdcard/Download/AudioVideoSyncTest.mp4", 0);
             progressBar.setVisibility(View.VISIBLE);
@@ -317,6 +337,10 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
         }
     }
 
+    private void createNewSource(){
+        mSource = null;
+        mSource = new AgoraVideoSource();
+    }
     private void joinChannel(String channelId) {
         // Check if the context is valid
         Context context = getContext();
@@ -391,6 +415,9 @@ public class MediaPlayerKit extends BaseFragment implements View.OnClickListener
         }
         // Prevent repeated entry
         join.setEnabled(false);
+
+        // Bac's Code
+        engine.setParameters("{\"che.video.android_zero_copy_mode\":0}");
     }
 
     /**
